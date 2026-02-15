@@ -1,0 +1,10 @@
+node_modules/
+.wrangler/
+dist/
+.env
+.env.local
+*.log
+.gemini/
+brain/
+*.exe
+register_script.js

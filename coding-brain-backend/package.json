@@ -1,0 +1,25 @@
+{
+  "name": "coding-brain-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240208.0",
+    "@types/jwt-simple": "^0.5.36",
+    "@types/node": "^20.19.33",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.65.0"
+  },
+  "dependencies": {
+    "hono": "^4.11.9",
+    "jwt-simple": "^0.5.6",
+    "zod": "^4.3.6"
+  }
+}
