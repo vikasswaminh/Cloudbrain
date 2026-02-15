@@ -1,18 +1,35 @@
 {
   "name": "coding-brain-cli",
-  "version": "1.0.0",
-  "description": "",
+  "version": "3.0.0",
+  "description": "Coding Brain CLI — Sovereign FSM • 16 Modes • Auditable",
   "main": "index.js",
   "scripts": {
+    "build": "npx esbuild index.ts --bundle --platform=node --outfile=dist/brain.js && npx pkg dist/brain.js --targets node18-win-x64,node18-linux-x64,node18-macos-x64 --output dist/brain",
+    "build:win": "npx esbuild index.ts --bundle --platform=node --outfile=dist/brain.js && npx pkg dist/brain.js --targets node18-win-x64 --output dist/brain.exe",
+    "build:linux": "npx esbuild index.ts --bundle --platform=node --outfile=dist/brain.js && npx pkg dist/brain.js --targets node18-linux-x64 --output dist/brain-linux",
+    "build:mac": "npx esbuild index.ts --bundle --platform=node --outfile=dist/brain.js && npx pkg dist/brain.js --targets node18-macos-x64 --output dist/brain-macos",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "brain": "./dist/brain.js"
+  },
+  "files": [
+    "dist/brain.js",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "keywords": [],
   "author": "",
   "dependencies": {
+    "@sentry/node": "^10.38.0",
     "axios": "^1.13.5",
     "chalk": "^5.6.2",
     "commander": "^14.0.3",
     "inquirer": "^9.3.8",
-    "ora": "^9.3.0"
+    "marked": "^15.0.12",
+    "marked-terminal": "^7.3.0",
+    "ora": "^5.4.1"
   }
 }

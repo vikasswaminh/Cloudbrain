@@ -8,3 +8,12 @@ dist/
 brain/
 *.exe
 register_script.js
+
+# Sandbox & Tests
+dst1/
+sandbox_fitness/
+sandbox_gold_standard/
+sandbox_real_world/
+simulation_test/
+test-news/
+test-sandbox/
