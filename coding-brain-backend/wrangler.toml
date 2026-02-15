@@ -1,7 +1,11 @@
 name = "coding-brain-backend"
 main = "src/index.ts"
-compatibility_date = "2024-09-23"
+compatibility_date = "2024-04-03"
 compatibility_flags = ["nodejs_compat"]
+
+[[routes]]
+pattern = "api.coding.super25.ai"
+custom_domain = true
 
 [[d1_databases]]
 binding = "DB"

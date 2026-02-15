@@ -27,7 +27,7 @@ const saveConfig = (config: any) => {
     fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
 };
 
-const API_URL = 'https://coding-brain-backend.vikas4988.workers.dev'; // Hardcoded for now, or make configurable
+const API_URL = 'https://api.coding.super25.ai'; // Custom Domain Migration
 
 program
     .name('brain')
@@ -38,7 +38,7 @@ program
     .command('auth')
     .description('Login to Coding Brain')
     .action(async () => {
-        console.log(chalk.blue('Please generate a CLI API Key from your dashboard: https://coding-brain-frontend.pages.dev/keys'));
+        console.log(chalk.blue('Please generate a CLI API Key from your dashboard: https://coding.super25.ai/keys'));
 
         const answers = await inquirer.prompt([
             {
