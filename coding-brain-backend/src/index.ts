@@ -5,7 +5,9 @@ import { UserController } from './controllers/UserController';
 import { PlanController } from './controllers/PlanController';
 import { ExecutionController } from './controllers/ExecutionController';
 import { AdminController, ApiKeyController } from './controllers/AdminController';
+import { DashboardController } from './controllers/DashboardController';
 import { GatewayController } from './controllers/GatewayController';
+import { sessionRoutes } from './controllers/SessionController';
 import { rbac } from './middleware/RBACMiddleware';
 
 type Bindings = {
@@ -15,6 +17,7 @@ type Bindings = {
     AI: any;
     JWT_SECRET: string;
     EXECUTION_COORDINATOR: DurableObjectNamespace;
+    SESSION_RECORDER: DurableObjectNamespace;
 };
 
 const app = new Hono<{ Bindings: Bindings }>();
@@ -52,12 +55,18 @@ app.post('/replay/:id', ExecutionController.replay);
 
 // --- AI Gateway Routes ---
 
-// Admin: Model Management
+// Admin: Model Management & Dashboard
 app.use('/admin/*', async (c: any, next: any) => rbac('admin', jwtSecret(c))(c, next));
 app.get('/admin/models', AdminController.listModels);
 app.post('/admin/models', AdminController.createModel);
 app.put('/admin/models/:id', AdminController.updateModel);
 app.delete('/admin/models/:id', AdminController.deleteModel);
+
+// Admin: Dashboard Analytics
+app.get('/admin/dashboard/stats', DashboardController.getStats);
+app.get('/admin/dashboard/health', DashboardController.getSystemHealth);
+app.get('/admin/dashboard/telemetry', DashboardController.getTelemetry);
+app.get('/admin/dashboard/usage', DashboardController.getUsage);
 
 // User: API Keys for CLI
 app.use('/keys/*', async (c: any, next: any) => rbac('viewer', jwtSecret(c))(c, next));
@@ -71,7 +80,12 @@ app.delete('/keys/:id', ApiKeyController.deleteKey);
 app.use('/gateway/*', async (c: any, next: any) => rbac('viewer', jwtSecret(c))(c, next));
 app.post('/gateway/chat', GatewayController.chat);
 
+// Session Routes (FSM telemetry)
+app.use('/sessions/*', async (c: any, next: any) => rbac('viewer', jwtSecret(c))(c, next));
+app.route('/sessions', sessionRoutes);
+
 export default app;
 
-// Export Durable Object class
+// Export Durable Object classes
 export { ExecutionCoordinator } from './durable-objects/ExecutionCoordinator';
+export { SessionRecorder } from './durable-objects/SessionRecorder';

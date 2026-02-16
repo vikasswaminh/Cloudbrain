@@ -9,7 +9,7 @@ export class GatewayService {
         this.env = env;
     }
 
-    async routeRequest(modelId: string, messages: any[]): Promise<any> {
+    async routeRequest(modelId: string, messages: any[], extras: { tools?: any[]; tool_choice?: any; stream?: boolean } = {}): Promise<any> {
         const model = await this.modelService.getModelById(modelId);
         if (!model) {
             throw new Error(`Model ${modelId} not found`);
@@ -23,7 +23,7 @@ export class GatewayService {
             case 'cloudflare':
                 return this.callCloudflareAI(model, messages);
             case 'openai_compatible':
-                return this.callOpenAICompatible(model, messages);
+                return this.callOpenAICompatible(model, messages, extras);
             default:
                 throw new Error(`Provider ${model.provider} not supported yet`);
         }
@@ -32,18 +32,23 @@ export class GatewayService {
     private async callCloudflareAI(model: ModelConfig, messages: any[]) {
         // model.name should be the CF model ID, e.g., "@cf/meta/llama-3-8b-instruct"
         const response = await this.env.AI.run(model.name, { messages });
-        return response; // Normalize this if needed
+        return response;
     }
 
-    private async callOpenAICompatible(model: ModelConfig, messages: any[]) {
+    private async callOpenAICompatible(model: ModelConfig, messages: any[], extras: { tools?: any[]; tool_choice?: any; stream?: boolean } = {}) {
         if (!model.base_url) throw new Error('Base URL required for OpenAI Compatible provider');
 
         let apiKey = '';
         if (model.api_key_env_var) {
-            // Retrieve key from KV or Secrets. Assuming Env for now, but safer in Secrets/KV
-            // In Cloudflare Workers, secrets are exposed on `this.env`
             apiKey = this.env[model.api_key_env_var] || '';
         }
+
+        const body: any = { model: model.name, messages };
+        if (extras.tools?.length) {
+            body.tools = extras.tools;
+            body.tool_choice = extras.tool_choice ?? 'auto';
+        }
+        if (extras.stream) body.stream = true;
 
         const response = await fetch(`${model.base_url}/chat/completions`, {
             method: 'POST',
@@ -51,10 +56,7 @@ export class GatewayService {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${apiKey}`
             },
-            body: JSON.stringify({
-                model: model.name, // or specific model name param if different
-                messages
-            })
+            body: JSON.stringify(body)
         });
 
         if (!response.ok) {

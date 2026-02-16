@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS sessions;
 DROP TABLE IF EXISTS events;
 DROP TABLE IF EXISTS executions;
 DROP TABLE IF EXISTS plans;
@@ -73,4 +74,20 @@ CREATE TABLE usage_logs (
   created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (model_id) REFERENCES models(id)
+);
+
+CREATE TABLE sessions (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  mode TEXT,
+  os TEXT,
+  prompt TEXT,
+  final_state TEXT,
+  fsm_version TEXT NOT NULL DEFAULT '1.0.0',
+  events_json TEXT NOT NULL,
+  commands_executed INTEGER DEFAULT 0,
+  commands_failed INTEGER DEFAULT 0,
+  started_at TEXT NOT NULL,
+  ended_at TEXT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id)
 );

@@ -6,6 +6,7 @@ import {
     PlusCircle,
     Key,
     Database,
+    BarChart3,
     LogOut,
     Menu,
     X
@@ -68,6 +69,7 @@ export const Layout = () => {
                     <NavItem to="/plan" icon={PlusCircle} label="New Plan" />
                     <NavItem to="/keys" icon={Key} label="API Keys" />
                     <NavItem to="/admin/models" icon={Database} label="Models" adminOnly={true} />
+                    <NavItem to="/admin/dashboard" icon={BarChart3} label="Analytics" adminOnly={true} />
                 </nav>
 
                 <div className="absolute bottom-0 w-full p-4 border-t border-gray-800">

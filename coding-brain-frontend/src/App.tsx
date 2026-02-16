@@ -6,6 +6,7 @@ import { PlanGenerator } from './pages/PlanGenerator';
 import { ExecutionDetail } from './pages/ExecutionDetail';
 import { ModelsPage } from './pages/ModelsPage';
 import { ApiKeysPage } from './pages/ApiKeysPage';
+import { AdminDashboard } from './pages/AdminDashboard';
 import { Layout } from './components/Layout';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="/execution/:id" element={<ExecutionDetail />} />
           <Route path="/keys" element={<ApiKeysPage />} />
           <Route path="/admin/models" element={<ModelsPage />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
         </Route>
       </Routes>
     </BrowserRouter>

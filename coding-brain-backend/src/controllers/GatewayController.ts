@@ -4,7 +4,7 @@ import { ModelService } from '../services/ModelService';
 
 export class GatewayController {
     static async chat(c: Context) {
-        const { model, messages } = await c.req.json();
+        const { model, messages, tools, tool_choice, stream } = await c.req.json();
 
         if (!model) return c.json({ error: 'Model ID required' }, 400);
         if (!messages || !Array.isArray(messages)) return c.json({ error: 'Messages array required' }, 400);
@@ -13,7 +13,7 @@ export class GatewayController {
         const gatewayService = new GatewayService(modelService, c.env);
 
         try {
-            const response = await gatewayService.routeRequest(model, messages);
+            const response = await gatewayService.routeRequest(model, messages, { tools, tool_choice, stream });
             return c.json(response);
         } catch (e: any) {
             console.error('Gateway Error:', e);
