@@ -7,6 +7,9 @@ import { ExecutionDetail } from './pages/ExecutionDetail';
 import { ModelsPage } from './pages/ModelsPage';
 import { ApiKeysPage } from './pages/ApiKeysPage';
 import { AdminDashboard } from './pages/AdminDashboard';
+import { TemplatesPage } from './pages/TemplatesPage';
+import { SchedulesPage } from './pages/SchedulesPage';
+import { WorkspacesPage } from './pages/WorkspacesPage';
 import { Layout } from './components/Layout';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
@@ -24,6 +27,13 @@ function App() {
           <Route path="/plan" element={<PlanGenerator />} />
           <Route path="/execution/:id" element={<ExecutionDetail />} />
           <Route path="/keys" element={<ApiKeysPage />} />
+
+          {/* Phase 1 Routes */}
+          <Route path="/templates" element={<TemplatesPage />} />
+          <Route path="/schedules" element={<SchedulesPage />} />
+          <Route path="/workspaces" element={<WorkspacesPage />} />
+
+          {/* Admin Routes */}
           <Route path="/admin/models" element={<ModelsPage />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
         </Route>
