@@ -8,6 +8,9 @@ import { AdminController, ApiKeyController } from './controllers/AdminController
 import { DashboardController } from './controllers/DashboardController';
 import { GatewayController } from './controllers/GatewayController';
 import { sessionRoutes } from './controllers/SessionController';
+import { TemplatesController } from './controllers/TemplatesController';
+import { SchedulesController } from './controllers/SchedulesController';
+import { WorkspacesController } from './controllers/WorkspacesController';
 import { rbac } from './middleware/RBACMiddleware';
 
 type Bindings = {
@@ -83,6 +86,39 @@ app.post('/gateway/chat', GatewayController.chat);
 // Session Routes (FSM telemetry)
 app.use('/sessions/*', async (c: any, next: any) => rbac('viewer', jwtSecret(c))(c, next));
 app.route('/sessions', sessionRoutes);
+
+// Phase 1 Features: Templates
+app.use('/templates/*', async (c: any, next: any) => rbac('viewer', jwtSecret(c))(c, next));
+app.get('/templates', TemplatesController.listTemplates);
+app.get('/templates/categories', TemplatesController.getCategories);
+app.get('/templates/:id', TemplatesController.getTemplate);
+app.post('/templates', TemplatesController.createTemplate);
+app.put('/templates/:id', TemplatesController.updateTemplate);
+app.delete('/templates/:id', TemplatesController.deleteTemplate);
+app.post('/templates/:id/rate', TemplatesController.rateTemplate);
+app.post('/templates/:id/execute', TemplatesController.executeTemplate);
+
+// Phase 1 Features: Scheduled Executions
+app.use('/schedules/*', async (c: any, next: any) => rbac('viewer', jwtSecret(c))(c, next));
+app.get('/schedules', SchedulesController.listSchedules);
+app.get('/schedules/:id', SchedulesController.getSchedule);
+app.post('/schedules', SchedulesController.createSchedule);
+app.put('/schedules/:id', SchedulesController.updateSchedule);
+app.delete('/schedules/:id', SchedulesController.deleteSchedule);
+app.post('/schedules/:id/toggle', SchedulesController.toggleSchedule);
+app.post('/schedules/:id/run-now', SchedulesController.runNow);
+
+// Phase 1 Features: Workspaces
+app.use('/workspaces/*', async (c: any, next: any) => rbac('viewer', jwtSecret(c))(c, next));
+app.get('/workspaces', WorkspacesController.listWorkspaces);
+app.get('/workspaces/:id', WorkspacesController.getWorkspace);
+app.post('/workspaces', WorkspacesController.createWorkspace);
+app.put('/workspaces/:id', WorkspacesController.updateWorkspace);
+app.delete('/workspaces/:id', WorkspacesController.deleteWorkspace);
+app.post('/workspaces/:id/invite', WorkspacesController.inviteMember);
+app.delete('/workspaces/:id/members/:userId', WorkspacesController.removeMember);
+app.put('/workspaces/:id/members/:userId/role', WorkspacesController.updateMemberRole);
+app.post('/workspaces/:id/leave', WorkspacesController.leaveWorkspace);
 
 export default app;
 
